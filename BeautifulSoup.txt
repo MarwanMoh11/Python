@@ -1,0 +1,29 @@
+import urllib.request
+import ssl
+from bs4 import BeautifulSoup
+
+ctx = ssl.create_default_context()
+ctx.check_hostname = False
+ctx.verify_mode = ssl.CERT_NONE
+
+url = input('Enter - ')
+
+repetitions = 0
+
+while True:
+    html = urllib.request.urlopen(url, context=ctx)
+    soup = BeautifulSoup(html, 'html.parser')
+    tags = soup('a')
+
+    total = 0
+    for tag in tags:
+        total += 1
+        if total == 3:
+            url = tag.get('href', None)
+            print(url)
+            repetitions += 1
+            break
+
+    if repetitions == 3:
+        break
+
